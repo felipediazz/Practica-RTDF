@@ -1,0 +1,547 @@
+{% extends 'app/base.html' %}
+{% load static%}
+
+
+{% block css%}
+
+{% endblock %}
+{% block contenido %}
+<link type="text/css" rel="stylesheet" href="{% static 'app/css/preregistrados.css' %}">
+<link type="text/css" rel="stylesheet" href="{% static 'app/css/esv.css' %}">
+
+<script src="{% static 'app/js/jquery-3.6.1.min.js' %}"></script>
+
+<!-- CONTENIDO principal -->
+
+<script src="{% static 'app/js/esv.js' %}"></script>
+
+
+
+<div style="width:100%; display:flex; justify-content:center; margin:5px;">
+    <main class="form-signin">
+        {% if request.user.is_superuser %}
+        <h1 class="h3 mb-3 fw-normal">Bienvenido, {{request.user.username}}.  </h1>
+        <h3 class="h3 mb-3 fw-normal">Revisa todos los registros realizados en este formulario aqui abajo!</h3>
+        {% elif not user_fonod %}
+          <div class="col-8">
+            <h1>ERROR 403, NO TIENES PERMISO DE INGRESAR</h1>
+
+          </div>
+        {% else %}
+        <div class="user-form">
+            <form action="" method="post">
+                {% csrf_token %}
+ 
+                <div class="registro-datos" id="registro-datos">
+                    <div class="generateid">
+                        <!-- DECLARA LA ID DEL fonoaudiologo AUTOMATICAMENTE -->
+                        {{ formulario.id_fonoaudiologo }}
+                    </div>
+                    <div class="row">
+                        <div class="col-12">                                              
+                            <label for="name_pac">Pacientes: </label>
+                                <!-- PACIENTE REGISTRARA COMO TEXTO SU NOMBRE -->
+                            <select id="pacientes"  name="pacientes" class="form-control" style="width:100%;" required>
+                              <option value="null" disabled selected>Seleccione un paciente</option> <!---->
+                              {% for p in paciente %}
+                              <option value="{{ p.id_prof_paci }}">{{ p.id_paciente }} </option>
+                              {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div  class="centerbtn" id="Button-RD1" style="  display: flex; justify-content: end; margin-top:5rem;">
+                        <button type="button" id="cont-form-esv-1">Continuar</button>
+                    </div>
+                    
+                    <div class="table">
+                        <h4 style="margin-top:5rem;">Historico de Escala Sintoma Vocal ingresados</h4>
+                        <table class="table" >
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center;" scope="col">Paciente</th>
+                                    <th style="text-align: center;" scope="col">Total ESV</th>
+                                    <th style="text-align: center;" scope="col">Limitacion</th>
+                                    <th style="text-align: center;" scope="col">Emocional</th>
+                                    <th style="text-align: center;" scope="col">Fisico</th>
+                                    <th style="text-align: center;" scope="col">TimeStamp</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in form %}
+                                <tr id={{i.id}}>
+                                    <th style="text-align: center;" value={{i.id_paciente}}>{{i.id_paciente}}</th>
+                                    <td style="text-align: center;" value={{i.totalESV}}>{{i.totalESV}}</td>
+                                    <td style="text-align: center;" value={{i.limitacion}}>{{i.limitacion}}</td>
+                                    <td style="text-align: center;" value={{i.emocional}}>{{i.emocional}}</td>
+                                    <td style="text-align: center;" value={{i.fisico}}>{{i.fisico}}</td>
+                                    <td style="text-align: center ;" value={{i.timestamp}}>{{i.timestamp}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="formulario-esv-1" style="display: none;" id="Form-esv-1">
+                    <div class="row">
+                        <div class="col-6" style="text-align: center;"> 
+                            <label for="Fecha_nac">Fecha nacimiento: </label>
+                                <!-- USUARIO DECLARA FECHA DE NACIMIENTO -->
+                            <input class="selectEsv" value="2018-01-01" type="date" name="Fecha_nac" id="id_fechanac"  max="2023-05-24">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="preg-1">
+                            <h1>1. ¿Tiene dificultades para llamar la atención de los demás usando su voz?</h1>
+                            <select class="selectEsv" required="" name="p1" id="Pregunta-1">
+                                <option value="" disabled selected>Seleccione una opción</option>
+                                {% for choice in formulario.p1.field.choices %}
+                                    {% if choice.0 %}
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="preg-2">
+                            <h1>2. ¿Tiene problemas al cantar?</h1>
+                            <select class="selectEsv" required="" name="p2" id="Pregunta-2">
+                                <option value="" disabled selected>Seleccione una opción</option>
+                                {% for choice in formulario.p2.field.choices %}
+                                    {% if choice.0 %}
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="preg-3">
+                            <h1>3. ¿Le duele la garganta?</h1>
+                            <select class="selectEsv" required="" name="p3" id="Pregunta-3">
+                                <option value="" disabled selected>Seleccione una opción</option>
+                                {% for choice in formulario.p3.field.choices %}
+                                    {% if choice.0 %}
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="preg-4">
+                            <h1>4. ¿Su voz está ronca?</h1>
+                            <select class="selectEsv" required="" name="p4" id="Pregunta-4">
+                                <option value="" disabled selected>Seleccione una opción</option>
+                                {% for choice in formulario.p4.field.choices %}
+                                    {% if choice.0 %}
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="preg-5">
+                            <h1>5. En conversaciones grupales, ¿Las personas tienen dificultades para escucharlo(a)?</h1>
+                            <select class="selectEsv" required="" name="p5" id="Pregunta-5">
+                                <option value="" disabled selected>Seleccione una opción</option>
+                                {% for choice in formulario.p5.field.choices %}
+                                    {% if choice.0 %}
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="preg-6">
+                            <h1>6. ¿Suele perder su voz?</h1>
+                            <select class="selectEsv" required="" name="p6" id="Pregunta-6">
+                                <option value="" disabled selected>Seleccione una opción</option>
+                                {% for choice in formulario.p6.field.choices %}
+                                    {% if choice.0 %}
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="preg-7">
+                            <h1>7. ¿Suele toser o carraspear?</h1>
+                            <select class="selectEsv" required="" name="p7" id="Pregunta-7">
+                                <option value="" disabled selected>Seleccione una opción</option>
+                                {% for choice in formulario.p7.field.choices %}
+                                    {% if choice.0 %}
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="preg-8">
+                            <h1>8. ¿Considera que tiene una voz débil?</h1>
+                            <select class="selectEsv" required="" name="p8" id="Pregunta-8">
+                                <option value="" disabled selected>Seleccione una opción</option>
+                                {% for choice in formulario.p8.field.choices %}
+                                    {% if choice.0 %}
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="preg-9">
+                            <h1>9. ¿Tiene problemas al hablar por teléfono?</h1>
+                            <select class="selectEsv" required="" name="p9" id="Pregunta-9">
+                                <option value="" disabled selected>Seleccione una opción</option>
+                                {% for choice in formulario.p9.field.choices %}
+                                    {% if choice.0 %}
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="preg-10">
+                            <h1>10. ¿Se siente menos valorado o deprimido debido a su problema de la voz?</h1>
+                            <select class="selectEsv" required="" name="p10" id="Pregunta-10">
+                                <option value="" disabled selected>Seleccione una opción</option>
+                                {% for choice in formulario.p10.field.choices %}
+                                    {% if choice.0 %}
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div  class="centerbtn" id="Button-formesv-1" style="  display: flex; justify-content: end; margin-top:5rem;">
+                        <button type="button" id="volver-a-0" style="margin-right: 1rem;">VOLVER</button>
+                        <button type="button" id="cont-form-esv-2" >CONTINUAR</button>
+                    </div>
+                    
+                </div>
+                <div class="formulario-esv-2" style="display: none;" id="Form-esv-2">
+                    <div class="row">
+                        <div class="preg-11">
+                            <h1>11. ¿Siente como si tuviera algo atascado en su garganta?</h1>
+                            <select class="selectEsv" required="" name="p11" id="Pregunta-11">
+                                <option value="null" disabled selected>Seleccione una opción</option>
+                                {% for choice in formulario.p11.field.choices %}
+                                    {% if choice.0 %}
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="preg-12">
+                            <h1>12. ¿Siente inflamación en la garganta?</h1>
+                            <select class="selectEsv" required="" name="p12" id="Pregunta-12">
+                                <option value="null" disabled selected>Seleccione una opción</option>
+                                {% for choice in formulario.p12.field.choices %}
+                                    {% if choice.0 %}
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="preg-13">
+                            <h1>13. ¿Siente pudor al usar su voz?</h1>
+                            <select class="selectEsv" required="" name="p13" id="Pregunta-13">
+                                <option value="null" disabled selected>Seleccione una opción</option>
+                                {% for choice in formulario.p13.field.choices %}
+                                    {% if choice.0 %}
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>    
+                    </div>
+                    <div class="row">
+                        <div class="preg-14">
+                            <h1>14. ¿Siente que se cansa al hablar?</h1>
+                            <select class="selectEsv" required="" name="p14" id="Pregunta-14">
+                                <option value="null" disabled selected>Seleccione una opción</option>
+                                {% for choice in formulario.p14.field.choices %}
+                                    {% if choice.0 %}
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>    
+                    </div>
+                    <div class="row">
+                        <div class="preg-15">
+                            <h1>15. ¿Su problema de la voz lo hace sentir estresado y nervioso?</h1>
+                            <select class="selectEsv" required="" name="p15" id="Pregunta-15">
+                                <option value="null" disabled selected>Seleccione una opción</option>
+                                {% for choice in formulario.p15.field.choices %}
+                                    {% if choice.0 %}
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>    
+                    </div>
+                    <div class="row">
+                        <div class="preg-16">
+                            <h1>16. ¿Tiene dificultades para hacerse escuchar cuando hay ruido en el ambiente?</h1>
+                            <select class="selectEsv" required="" name="p16" id="Pregunta-16">
+                                <option value="null" disabled selected>Seleccione una opción</option>
+                                {% for choice in formulario.p16.field.choices %}
+                                    {% if choice.0 %}
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>    
+                    </div>
+                    <div class="row">
+                        <div class="preg-17">
+                            <h1>17. ¿Es incapaz de gritar o alzar la voz?</h1>
+                            <select class="selectEsv" required="" name="p17" id="Pregunta-17">
+                                <option value="null" disabled selected>Seleccione una opción</option>
+                                {% for choice in formulario.p17.field.choices %}
+                                    {% if choice.0 %}
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>    
+                    </div>
+                    <div class="row">
+                        <div class="preg-18">
+                            <h1>18. ¿Su problema de la voz le genera complicaciones con su familia y amigos?</h1>
+                            <select class="selectEsv" required="" name="p18" id="Pregunta-18">
+                                <option value="null" disabled selected>Seleccione una opción</option>
+                                {% for choice in formulario.p18.field.choices %}
+                                    {% if choice.0 %}
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>    
+                    </div>
+                    <div class="row">
+                        <div class="preg-19">
+                            <h1>19. ¿Tiene mucha flema o mucosidad en su garganta?</h1>
+                            <select class="selectEsv" required="" name="p19" id="Pregunta-19">
+                                <option value="null" disabled selected>Seleccione una opción</option>
+                                {% for choice in formulario.p19.field.choices %}
+                                    {% if choice.0 %}
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>    
+                    </div>
+                    <div class="row">
+                        <div class="preg-20">
+                            <h1>20. ¿Siente que la calidad de su voz varía durante el día?</h1>
+                            <select class="selectEsv" required="" name="p20" id="Pregunta-20">
+                                <option value="null" disabled selected>Seleccione una opción</option>
+                                {% for choice in formulario.p20.field.choices %}
+                                    {% if choice.0 %}
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>                            
+                    </div>
+                    <div  class="centerbtn" id="Button-formesv-2" style="  display: flex; justify-content: end; margin-top:5rem;">
+                        <button type="button" id="volver-a-1" style="margin-right: 1rem;">VOLVER</button>
+                        <button type="button" id="cont-form-esv-3">CONTINUAR</button>
+                    </div>
+                </div>
+                <div class="formulario-esv-3" style="display: none;" id="Form-esv-3">
+                    <div class="row">
+                        <div class="preg-21">
+                            <h1>21. ¿Siente que a las personas les molesta su voz?</h1>
+                            <select class="selectEsv" required="" name="p21" id="Pregunta-21">
+                                <option value="null" disabled selected>Seleccione una opción</option>
+                                {% for choice in formulario.p21.field.choices %}
+                                    {% if choice.0 %}
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>    
+                    </div>
+                    <div class="row">
+                        <div class="preg-22">
+                            <h1>22. ¿Tiene la nariz tapada?</h1>
+                            <select class="selectEsv" required="" name="p22" id="Pregunta-22">
+                                <option value="null" disabled selected>Seleccione una opción</option>
+                                {% for choice in formulario.p22.field.choices %}
+                                    {% if choice.0 %}
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>    
+                    </div>
+                    <div class="row">
+                        <div class="preg-23">
+                            <h1>23. ¿La gente le pregunta qué le pasa a su voz?</h1>
+                            <select class="selectEsv" required="" name="p23" id="Pregunta-23">
+                                <option value="null" disabled selected>Seleccione una opción</option>
+                                {% for choice in formulario.p23.field.choices %}
+                                    {% if choice.0 %}
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>    
+                    </div>
+                    <div class="row">
+                        <div class="preg-24">
+                            <h1>24. ¿Siente que su voz suena ronca y seca?</h1>
+                            <select class="selectEsv" required="" name="p24" id="Pregunta-24">
+                                <option value="null" disabled selected>Seleccione una opción</option>
+                                {% for choice in formulario.p24.field.choices %}
+                                    {% if choice.0 %}
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>    
+                    </div>
+                    <div class="row">
+                        <div class="preg-25">
+                            <h1>25. ¿Siente que debe esforzarse para sacar la voz?</h1>
+                            <select class="selectEsv" required="" name="p25" id="Pregunta-25">
+                                <option value="null" disabled selected>Seleccione una opción</option>
+                                {% for choice in formulario.p25.field.choices %}
+                                    {% if choice.0 %}
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>    
+                    </div>
+                    <div class="row">
+                        <div class="preg-26">
+                            <h1>26. ¿Con cuánta frecuencia presenta infecciones en la garganta?</h1>
+                            <select class="selectEsv" required="" name="p26" id="Pregunta-26">
+                                <option value="null" disabled selected>Seleccione una opción</option>
+                                {% for choice in formulario.p26.field.choices %}
+                                    {% if choice.0 %}
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>    
+                    </div>
+                    <div class="row">
+                        <div class="preg-27">
+                            <h1>27. ¿Su voz se “agota” mientras está hablando?</h1>
+                            <select class="selectEsv" required="" name="p27" id="Pregunta-27">
+                                <option value="null" disabled selected>Seleccione una opción</option>
+                                {% for choice in formulario.p27.field.choices %}
+                                    {% if choice.0 %}
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>    
+                    </div>
+                    <div class="row">
+                        <div class="preg-28">
+                            <h1>28. ¿Su voz lo(a) hace sentir incompetente?</h1>
+                            <select class="selectEsv" required="" name="p28" id="Pregunta-28">
+                                <option value="null" disabled selected>Seleccione una opción</option>
+                                {% for choice in formulario.p28.field.choices %}
+                                    {% if choice.0 %}
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endif %}
+                                {% endfor %}
+
+                            </select>
+                        </div>    
+                    </div>
+                    <div class="row">
+                        <div class="preg-29">
+                            <h1>29. ¿Se siente avergonzado debido a su problema de la voz?</h1>
+                            <select class="selectEsv" required="" name="p29" id="Pregunta-29">
+                                <option value="null" disabled selected>Seleccione una opción</option>
+                                {% for choice in formulario.p29.field.choices %}
+                                    {% if choice.0 %}
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>    
+                    </div>
+                    <div class="row">
+                        <div class="preg-30">
+                            <h1>30. ¿Se siente aislado por sus problemas con la voz?</h1>
+                            <select class="selectEsv" required="" name="p30" id="Pregunta-30">
+                                <option value="null" disabled selected>Seleccione una opción</option>
+                                {% for choice in formulario.p30.field.choices %}
+                                    {% if choice.0 %}
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="pregOcultas">
+                            {{ formulario.totalESV }}    
+                            {{ formulario.id_paciente}}
+                            {{ formulario.limitacion }}
+                            {{ formulario.emocional }}
+                            {{ formulario.fisico }}    
+                        </div>
+                    </div>
+                    <div  class="centerbtn" id="BUTTON-REGISTRAR" style="  display: flex; justify-content: end; margin-top:5rem;">
+                        <button type="button" id="volver-a-2" style="margin-right: 1rem;">VOLVER</button>
+                        <button type="submit" id="TEST">GUARDAR REGISTRO</button>
+                        <!-- <button type="submit" id="TEST">REGISTRAR</button> -->
+                    </div>
+                </div>  
+            </form>
+        </div>
+        {% endif %}
+        {% if request.user.is_superuser %}
+        <div class="table">
+            <h4 style="margin-top:5rem;">Historico de Escala Sintoma Vocal ingresados</h4>
+            <table class="table" >
+                <thead>
+                    <tr>
+                        <th style="text-align: center;" scope="col">Paciente</th>
+                        <th style="text-align: center;" scope="col">Total ESV</th>
+                        <th style="text-align: center;" scope="col">Limitacion</th>
+                        <th style="text-align: center;" scope="col">Emocional</th>
+                        <th style="text-align: center;" scope="col">Fisico</th>
+                        <th style="text-align: center;" scope="col">TimeStamp</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in form %}
+                    <tr id={{i.id}}>
+                        <th style="text-align: center;" value={{i.id_paciente}}>{{i.id_paciente}}</th>
+                        <td style="text-align: center;" value={{i.totalESV}}>{{i.totalESV}}</td>
+                        <td style="text-align: center;" value={{i.limitacion}}>{{i.limitacion}}</td>
+                        <td style="text-align: center;" value={{i.emocional}}>{{i.emocional}}</td>
+                        <td style="text-align: center;" value={{i.fisico}}>{{i.fisico}}</td>
+                        <td style="text-align: center ;" value={{i.timestamp}}>{{i.timestamp}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </main>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,190 @@
+{% extends 'app/base.html' %}
+{% load static%}
+
+
+{% block css%}
+
+{% endblock %}
+{% block contenido %}
+<link type="text/css" rel="stylesheet" href="{% static 'app/css/preregistrados.css' %}">
+<link type="text/css" rel="stylesheet" href="{% static 'app/css/grbasForm.css' %}">
+<script src="{% static 'app/js/jquery-3.6.1.min.js' %}"></script>
+
+
+<!-- CONTENIDO principal -->
+
+
+<!-- style del contenido principal -->
+
+
+
+
+
+<div class="mainformCss">
+
+<main class="form-signin">
+
+  {% if request.user.is_superuser %}
+  {% else %}
+    <div class="row">
+      <div class="col-12">
+        <h4>Pacientes</h4>
+        <select id="pacientes" name="pacientes" class="form-control" style="width:100%;" required>
+          <option value="null" disabled selected>Seleccione un paciente</option> <!---->
+          {% for p in pacientes %}
+          <option value="{{ p.id_prof_paci }}">{{ p.id_paciente }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    
+    
+  <form id="mi-formulario" class="formcssin" action="" method="post" >
+    {% csrf_token %}
+    <div class="row">
+      <div class="col-6">
+        <label  for="{{ formulario.G.id }}" id="label-{{ formulario.G.id }}" onclick="document.getElementById('{{ formulario.G.id }}').click()">Grado de disfonia (G): </label>
+        <select name="{{ formulario.G.name }}" id="id_G">
+          <option value="" selected disabled>Seleccione valor:</option>
+          {% for choice in formulario.G.field.choices %}
+            {% if choice.0 %}
+              <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+            {% endif %}
+          {% endfor %}
+        </select>
+        <div id="error-messageG"></div>
+      </div>      
+      <div class="col-6">
+        <label  for="{{ formulario.R.id }}" id="label-{{ formulario.R.id }}" onclick="document.getElementById('{{ formulario.R.id }}').click()">Rugosidad de la Voz (R):  </label>
+        <select name="{{ formulario.R.name }}" id="id_R"> 
+          <option value="" selected disabled>Seleccione valor:</option>
+          {% for choice in formulario.R.field.choices %}
+            {% if choice.0 %}
+              <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+            {% endif %}
+          {% endfor %}
+        </select>
+        <div id="error-messageR"></div>
+      </div>
+      </div>
+      <div class="row">
+      <div class="col-6">
+        <label  for="{{ formulario.B.id }}" id="label-{{ formulario.B.id }}" onclick="document.getElementById('{{ formulario.B.id }}').click()">Respiracion dificultosa (B):  </label>
+        <select name="{{ formulario.B.name }}" id="id_B">
+          <option value="" selected disabled>Seleccione valor:</option>
+          {% for choice in formulario.B.field.choices %}
+            {% if choice.0 %}
+              <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+            {% endif %}
+          {% endfor %}
+        </select>
+        <div id="error-messageB"></div>
+      </div>
+      <div class="col-6">
+        <label  for="{{ formulario.A.id }}" id="label-{{ formulario.A.id }}" onclick="document.getElementById('{{ formulario.A.id }}').click()">Astenia (A):  </label>
+        <select name="{{ formulario.A.name }}" id="id_A">
+          <option value="" selected disabled>Seleccione valor:</option>
+          {% for choice in formulario.A.field.choices %}
+            {% if choice.0 %}
+              <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+            {% endif %}
+          {% endfor %}
+        </select>
+        <div id="error-messageA"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+
+        <label class="labelCenter" for="{{ formulario.S.id }}" id="label-{{ formulario.S.id }}" onclick="document.getElementById('{{ formulario.S.id }}').click()">Tensi&oacute;n vocal (S):  </label>
+        <select name="{{ formulario.S.name }}" id="id_S">
+          <option value="" selected disabled>Seleccione valor:</option>
+          {% for choice in formulario.S.field.choices %}
+            {% if choice.0 %}
+              <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+            {% endif %}
+          {% endfor %}
+        </select>
+        <div id="error-messageS"></div>
+      </div> 
+    </div>
+    <div class="row">
+      <div class="col-12">
+        {{ formulario.Comentario.label_tag }}
+        {{ formulario.Comentario }}
+      </div>
+
+    </div>
+    <div class="col-12">
+      {{ formulario.id_paciente }}
+      {{ formulario.id_fonoaudilogo }}
+      {{ formulario.timestamp }}        
+    </div>  
+ 
+
+
+      
+    
+
+
+    {% endif%}
+
+    {% if request.user.is_superuser %}
+
+    {% else %}
+    <div  class="centerbtn" style="  display: flex; justify-content: end; margin-top:5rem;">
+      <button type="submit">REGISTRAR</button>
+    </div>
+  {% endif%}
+  </form>
+
+
+
+    <h4 style="margin-top:5rem;">Historico de GRBAS ingresados</h4>
+    <table class="table" >
+        <thead>
+          <tr>
+            <th style="text-align: center;" scope="col">#</th>
+            <th style="text-align: center;" scope="col">Paciente</th>
+            <th style="text-align: center;" scope="col">G</th>
+            <th style="text-align: center;" scope="col">R</th>
+            <th style="text-align: center;" scope="col">B</th>
+            <th style="text-align: center;" scope="col">A</th>
+            <th style="text-align: center;" scope="col">S</th>
+            <th style="text-align: center;" scope="col">Comentario</th>
+            <th style="text-align: center;" scope="col">TimeStamp</th>
+          </tr>
+        </thead>
+        <tbody>
+             {% for i in form %}
+
+          <tr id={{i.id}}>
+            <th style="text-align: center ;" value={{i.id}}>{{i.id}}</th>
+            <th style="text-align: center ;" value={{i.id_paciente}}>{{i.id_paciente}}</th>
+            <td style="text-align: center ;" value={{i.G}}>{{i.G}}</td>
+            <td style="text-align: center ;" value={{i.R}}>{{i.R}}</td>
+            <td style="text-align: center ;" value={{i.B}}>{{i.B}}</td>
+            <td style="text-align: center ;" value={{i.A}}>{{i.A}}</td>
+            <td style="text-align: center ;" value={{i.S}}>{{i.S}}</td>
+            <td style="text-align: center ;" value={{i.Comentario}}>{{i.Comentario}}</td>
+            <td style="text-align: center ;" value={{i.timestamp}}>{{i.timestamp}}</td>
+          </tr>
+{% endfor %}
+        </tbody>
+    </table>
+
+  </main>
+</div>
+
+
+<script src="{% static 'app/js/grbas.js' %}"></script>
+
+
+
+
+{% endblock %}
+
+
+
+
+

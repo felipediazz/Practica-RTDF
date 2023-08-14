@@ -1,0 +1,12 @@
+.labelCenter{
+    text-align: center;
+}
+.mainformCss{
+    width:100%;
+    display:flex; 
+    justify-content:center; 
+    margin-top: -6vw;
+}
+.formcssin{
+    margin-top:2rem;
+}

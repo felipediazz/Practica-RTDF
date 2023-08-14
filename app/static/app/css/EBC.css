@@ -1,0 +1,143 @@
+input[type="radio" i], input[type="radio"]{
+    background-color: initial;
+    cursor: default;
+    appearance: auto;
+    box-sizing: border-box;
+    margin: 3px 3px 0px 5px;
+    padding: initial;
+    border: initial;
+}
+input[type="checkbox" i] {
+    background-color: initial;
+    cursor: default;
+    appearance: auto;
+    box-sizing: border-box;
+    margin: 3px 3px 3px 4px;
+    padding: initial;
+    border: initial;
+}
+select #pacientes{
+    width:100%;
+}
+.ajustar{
+    display: flex;
+    justify-content: center;
+}
+#RDA{
+    background-color: aqua;
+    -webkit-appearance: checkbox!important;
+    appearance: checkbox!important;
+    width: 20px; /* Ancho deseado */
+    height: 20px; /* Altura deseada */
+}
+.resp1, .resp2, .resp3, .resp4 {
+    transition: opacity 0.5s ease;
+}  
+
+.input{
+    display: none!important;
+}
+.centerbtn{
+    display: flex; justify-content: flex-end; margin-top: 5rem;
+}
+.centerbtn #Button-RD1{
+    display: flex; 
+    justify-content: flex-end; 
+    margin-top: 5rem;
+}
+div .row #nextButton{
+    text-align: end;
+}
+div .table #subtittleEBC{
+    margin-top:5rem;
+}
+#setMain{
+    width:100%; 
+    display:flex; 
+    justify-content:center; 
+    margin:5px;
+}
+
+th{
+    text-align: center!important;
+}
+.pregmult{
+    margin-top: -7vh;
+}
+#Bateria-1{
+    text-align: center;
+}
+#Bateria-2{
+    text-align: center;
+}
+.formEBC-part-1-1{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.formEBC-part-1-2{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.registro-datos{
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
+.formEBC-part-2-1{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.formEBC-part-3-1{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.textAr::placeholder{
+    opacity: 0.5;
+    text-align: center;
+}
+body{
+    width: 94vw;
+}
+.inputopc{
+    /* display: none!important; */
+    -webkit-appearance: auto!important;
+    appearance: auto!important;
+}
+.ocult{
+    display: none;
+}
+textarea{
+    resize: none;   
+}
+.separacion{
+    height: 2vw;
+    border-top: solid 0.5vw;
+    border-bottom: solid 0.5vw;
+}
+.preguntas{
+    font-family: none;
+}
+#contexto{
+    text-align: center;
+}
+#pcspm{
+    margin-top: -13vw;
+}
+.thistable td{
+    text-align: center;
+}
+.table .table th,.table .table td{
+    text-align: center;
+
+}
+
+form table tr:nth-child(even){
+    background-color: #eeeeee;
+}   
+.thintern{
+    text-align: left!important;
+}

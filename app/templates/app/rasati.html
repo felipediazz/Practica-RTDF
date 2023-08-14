@@ -1,0 +1,197 @@
+{% extends 'app/base.html' %}
+{% load static%}
+
+
+{% block css%}
+
+{% endblock %}
+{% block contenido %}
+<link type="text/css" rel="stylesheet" href="{% static 'app/css/preregistrados.css' %}">
+<link type="text/css" rel="stylesheet" href="{% static 'app/css/rasatiform.css' %}">
+
+
+<script src="{% static 'app/js/jquery-3.6.1.min.js' %}"></script>
+
+<!-- CONTENIDO principal -->
+
+
+
+
+
+<div style="width:100%; display:flex; justify-content:center; margin:5px;">
+
+<main class="form-signin">
+
+  {% if request.user.is_superuser %}
+  {% else %}
+<form id="mi-formulario" action="" method="post" >
+  {% csrf_token %}
+  <div class="col-10" style="padding-left: 14rem;">
+    <h4>Pacientes</h4>
+    <select id="pacientes"  name="pacientes" class="form-control" style="width:87%;" required>
+      <option value="null" disabled selected>Seleccione un paciente</option> <!---->
+      {% for p in paciente %}
+      <option value="{{ p.id_prof_paci }}">{{ p.id_paciente }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="row">
+      <div class="col-3">
+        <label class="labelAlign"  for="FORMULARIO-R-id" id="FORMULARIO-R">Ronquera (R):</label>
+          <select name="R" onchange="ocultarError(name)" id="FORMULARIO-R-id">  
+            <option value="" selected disabled>Seleccione valor:</option>
+            {% for choice in formulario.R.field.choices %}
+              {% if choice.0 %}
+                <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+          <div id="error-messageR"></div>
+        </div>
+
+      <div class="col-3">
+        <label class="labelAlign" for="FORMULARIO-A1-id" id="FORMULARIO-A1">Aspereza (A): </label>
+          <select name="A1" onchange="ocultarError(name)" id="FORMULARIO-A1-id">  
+            <option value="" selected disabled>Seleccione valor:</option>
+            {% for choice in formulario.A1.field.choices %}
+              {% if choice.0 %}
+                <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+          <div id="error-messageA1"></div>
+      </div>
+      <div class="col-3">
+        <label class="labelAlign" for="FORMULARIO-S-id" id="FORMULARIO-S">Soplo(S): </label>
+          <select name="S" onchange="ocultarError(name)" id="FORMULARIO-S-id">  
+            <option value="" selected disabled>Seleccione valor:</option>
+            {% for choice in formulario.S.field.choices %}
+              {% if choice.0 %}
+                <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+          <div id="error-messageS"></div>
+      </div>
+      <div class="col-3">
+        <label class="labelAlign" for="FORMULARIO-A2-id" id="FORMULARIO-A2">Astenia(A): </label>
+          <select name="A2" onchange="ocultarError(name)" id="FORMULARIO-A2-id">  
+            <option value="" selected disabled>Seleccione valor:</option>
+            {% for choice in formulario.A2.field.choices %}
+              {% if choice.0 %}
+                <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+          <div id="error-messageA2"></div>
+      </div>
+  </div>
+
+  <div class="row">
+    <div class="col-6">
+      <label class="labelAlign" for="FORMULARIO-T-id" id="FORMULARIO-T">Tensi&oacute;n (T): </label>
+        <select name="T" onchange="ocultarError(name)" id="FORMULARIO-T-id">  
+          <option value="" selected disabled>Seleccione valor:</option>
+          {% for choice in formulario.T.field.choices %}
+            {% if choice.0 %}
+              <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+            {% endif %}
+          {% endfor %}
+        </select>
+        <div id="error-messageT"></div>
+
+  </div>
+    <div class="col-6">
+      <label class="labelAlign"  for="FORMULARIO-I-id" id="FORMULARIO-I">Inestabilidad (I):   </label>
+        <select name="I" onchange="ocultarError(name)" id="FORMULARIO-I-id">  
+          <option value="" selected disabled>Seleccione valor:</option>
+          {% for choice in formulario.I.field.choices %}
+            {% if choice.0 %}
+              <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+            {% endif %}
+          {% endfor %}
+        </select>
+        <div id="error-messageI"></div>
+    </div>
+  </div>
+  <br>
+<div class="row">
+      <div class="col-12" style="margin-top: 0; padding: 0px 0px 0px 0px!important;">
+        {{ formulario.Comentario.label_tag }}
+        {{ formulario.Comentario }}
+      </div>
+      <div class="col-6" style="display: none; position: absolute;">
+        {{ formulario.id_paciente }}
+        {{ formulario.id_fonoaudilogo }}
+        {{ formulario.timestamp }}
+      </div>
+</div>
+
+
+
+
+{% endif%}
+
+
+
+
+{% if request.user.is_superuser %}
+
+{% else %}
+  <div  class="centerbtn" style="  display: flex; justify-content: end; margin-top:2rem;">
+    <button type="submit">REGISTRAR</button>
+  </div>
+{% endif%}
+</form>
+
+
+
+
+
+    <h4 style="margin-top:5rem;">Historico de RASATI ingresados</h4>
+    <table class="table" >
+        <thead>
+          <tr>
+            <th style="text-align: center;" scope="col">#</th>
+            <th style="text-align: center;" scope="col">Paciente</th>
+            <th style="text-align: center;" scope="col">R</th>
+            <th style="text-align: center;" scope="col">A</th>
+            <th style="text-align: center;" scope="col">S</th>
+            <th style="text-align: center;" scope="col">A</th>
+            <th style="text-align: center;" scope="col">T</th>
+            <th style="text-align: center;" scope="col">I</th>
+            <th style="text-align: center;" scope="col">Comentario</th>
+            <th style="text-align: center;" scope="col">TimeStamp</th>
+          </tr>
+        </thead>
+        <tbody>
+             {% for i in form %}
+
+          <tr id={{i.id}}>
+            <th style="text-align: center;" value={{i.id}}>{{i.id}}</th>
+            <th style="text-align: center;" value={{i.id_paciente}}>{{i.id_paciente}}</th>
+            <td style="text-align: center;" value={{i.R}}>{{i.R}}</td>
+            <td style="text-align: center;" value={{i.A}}>{{i.A1}}</td>
+            <td style="text-align: center;" value={{i.S}}>{{i.S}}</td>
+            <td style="text-align: center;" value={{i.A}}>{{i.A2}}</td>
+            <td style="text-align: center;" value={{i.T}}>{{i.T}}</td>
+            <td style="text-align: center;" value={{i.I}}>{{i.I}}</td>
+            <td style="text-align: center;" value={{i.Comentario}}>{{i.Comentario}}</td>
+            <td style="text-align: center ;" value={{i.timestamp}}>{{i.timestamp}}</td>
+          </tr>
+{% endfor %}
+        </tbody>
+    </table>
+
+  </main>
+</div>
+
+
+
+<script src="{% static 'app/js/rasati.js' %}"></script>
+{% endblock %}
+
+
+
+
+
